@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace onionSA.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    // [Route("[controller]")] teste
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
