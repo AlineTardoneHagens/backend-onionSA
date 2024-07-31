@@ -1,6 +1,6 @@
 namespace OnionSA.Models
 {
-    public class Cliente
+    public class ClsCliente
     {
         public int Id { get; set; }
         public string Documento { get; set; }  // CPF ou CNPJ sem pontos ou traços
