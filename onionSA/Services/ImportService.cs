@@ -18,15 +18,25 @@ namespace OnionSA.Services
         {
             _context = context;
             _httpClient = httpClient;
+            
         }
 
         public async Task ImportExcel(IFormFile file)
         {
+            SetupSeedData();
+
+            //Licença gratuita do EPPlus;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             if (file == null || file.Length == 0)
                 throw new Exception("File not selected");
 
             using (var stream = new MemoryStream())
             {
+                Console.WriteLine(stream);
+                Console.WriteLine(file);
+
+
                 await file.CopyToAsync(stream);
                 using (var package = new ExcelPackage(stream))
                 {
@@ -67,8 +77,11 @@ namespace OnionSA.Services
 
                         var pedido = new ClsPedido
                         {
+                            Id = row,
+                            ClienteId = cliente.Id,
                             Cliente = cliente,
                             Produto = produto,
+                            ProdutoId = produto.Id,
                             NumeroPedido = numeroPedido,
                             Data = data,
                             ValorFinal = valorFinal,
@@ -76,10 +89,19 @@ namespace OnionSA.Services
                         };
 
                         _context.Pedidos.Add(pedido);
-                    }
+                            }
                     await _context.SaveChangesAsync();
                 }
             }
+        }
+
+        private void SetupSeedData()
+        {
+            _context.Produtos.AddRange(
+            new ClsProduto { Id = 1, Nome = "Celular", Valor = 1000 },
+            new ClsProduto { Id = 2, Nome = "Notebook", Valor = 3000 },
+            new ClsProduto { Id = 3, Nome = "Televisão", Valor = 5000 }
+            );
         }
 
         private async Task<ClsViaCepResponse> ConsultarViaCep(string cep)
@@ -88,7 +110,9 @@ namespace OnionSA.Services
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<ClsViaCepResponse>(content);
+                var json = JsonSerializer.Deserialize<ClsViaCepResponse>(content);
+                Console.WriteLine(json);
+                return json;
             }
             return null;
         }
