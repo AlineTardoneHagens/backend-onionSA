@@ -15,7 +15,7 @@ namespace OnionSA.Controllers
             _importService = importService;
         }
 
-        [HttpPost("import")]
+        [HttpPost("")]
         public async Task<IActionResult> Import(IFormFile file)
         {
             if (file == null || file.Length == 0)

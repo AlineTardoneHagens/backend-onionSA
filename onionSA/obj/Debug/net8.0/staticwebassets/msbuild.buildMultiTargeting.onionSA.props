@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\onionSA.props" />
+</Project>

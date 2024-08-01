@@ -5,11 +5,11 @@ namespace OnionSA.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SalesController : ControllerBase
+    public class PedidosController : ControllerBase
     {
         private readonly PedidosService _salesService;
 
-        public SalesController(PedidosService salesService)
+        public PedidosController(PedidosService salesService)
         {
             _salesService = salesService;
         }
