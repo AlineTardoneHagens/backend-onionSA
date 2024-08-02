@@ -19,93 +19,91 @@ namespace OnionSA.Services
         {
             _context = context;
             _httpClient = httpClient;
-            
+
         }
 
-        public async Task ImportExcel(IFormFile file)
+        public async Task ImportaExcel(IFormFile file)
         {
-            SetupSeedData();
-
-            //Licença gratuita do EPPlus;
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            if (file == null || file.Length == 0)
-                throw new Exception("File not selected");
-
-            using (var stream = new MemoryStream())
+            try
             {
-                Console.WriteLine(stream);
-                Console.WriteLine(file);
+                //Licença gratuita do EPPlus;
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+                if (file == null || file.Length == 0)
+                    throw new Exception("Arquivo não selecionado.");
 
-                await file.CopyToAsync(stream);
-                using (var package = new ExcelPackage(stream))
+                using (var stream = new MemoryStream())
                 {
-                    var worksheet = package.Workbook.Worksheets.First();
-                    var rowCount = worksheet.Dimension.Rows;
-                    for (int row = 2; row <= rowCount; row++)
+                    Console.WriteLine(stream);
+                    Console.WriteLine(file);
+
+
+                    await file.CopyToAsync(stream);
+                    using (var package = new ExcelPackage(stream))
                     {
-                        var documento = worksheet.Cells[row, 1].Text.Replace(".", "").Replace("-", "");
-                        var nome = worksheet.Cells[row, 2].Text;
-                        var cep = worksheet.Cells[row, 3].Text.Replace("-", "");
-                        var produtoNome = worksheet.Cells[row, 4].Text;
-                        var numeroPedido = worksheet.Cells[row, 5].Text;
-                        var data = DateTime.ParseExact(worksheet.Cells[row, 6].Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-                        var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.Documento == documento);
-                        if (cliente == null)
+                        var worksheet = package.Workbook.Worksheets.First();
+                        var rowCount = worksheet.Dimension.Rows;
+                        for (int row = 2; row <= rowCount; row++)
                         {
-                            cliente = new ClsCliente { Documento = documento, Nome = nome, Cep = cep };
-                            _context.Clientes.Add(cliente);
-                        }
+                            var documento = worksheet.Cells[row, 1].Text.Replace(".", "").Replace("-", "");
+                            var nome = worksheet.Cells[row, 2].Text;
+                            var cep = worksheet.Cells[row, 3].Text.Replace("-", ""); ;
+                            var produtoNome = worksheet.Cells[row, 4].Text;
+                            var numeroPedido = worksheet.Cells[row, 5].Text;
+                            var data = DateTime.ParseExact(worksheet.Cells[row, 6].Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                        var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Nome == produtoNome);
-                        if (produto == null)
-                        {
-                            throw new Exception($"Produto {produtoNome} não encontrado no banco de dados.");
-                        }
-
-                        var viaCepResponse = await ConsultarViaCep(cep);
-                        if (viaCepResponse == null)
-                        {
-                            throw new Exception($"CEP {cep} não encontrado.");
-                        }
-
-                        var valorProduto = produto.Valor;
-                        var valorFrete = CalcularFrete(viaCepResponse.Uf, valorProduto);
-                        var valorFinal = valorProduto + valorFrete;
-                        var dataEntrega = CalcularDataEntrega(viaCepResponse.Uf, data);
-
-                        var pedido = new ClsPedido
-                        {
-                            Id = row,
-                            ClienteId = cliente.Id,
-                            Cliente = cliente,
-                            Produto = produto,
-                            ProdutoId = produto.Id,
-                            NumeroPedido = numeroPedido,
-                            Data = data,
-                            ValorFinal = valorFinal,
-                            DataEntrega = dataEntrega
-                        };
-
-                        _context.Pedidos.Add(pedido);
+                            var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.Documento == documento);
+                            if (cliente == null)
+                            {
+                                cliente = new ClsCliente { Documento = documento, Nome = nome, Cep = cep };
+                                _context.Clientes.Add(cliente);
                             }
-                    await _context.SaveChangesAsync();
+
+                            var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Nome == produtoNome);
+                            if (produto == null)
+                            {
+                                Console.WriteLine($"Produto {produtoNome} não encontrado no banco de dados.");
+                                throw new Exception($"Produto {produtoNome} não encontrado no banco de dados.");
+                            }
+
+                            var viaCepResponse = await ConsultaViaCep(cep);
+                            if (viaCepResponse == null)
+                            {
+                                Console.WriteLine($"Cep {produtoNome} não encontrado no via CEP.");
+                                throw new Exception($"Cep {produtoNome} não encontrado no via CEP.");
+                            }
+
+                            var valorProduto = produto.Valor;
+                            var valorFrete = CalculaFrete(viaCepResponse.Uf, valorProduto);
+                            var valorFinal = valorProduto + valorFrete;
+                            var dataEntrega = CalculaDataEntrega(viaCepResponse.Uf, data);
+
+                            var pedido = new ClsPedido
+                            {
+                                ClienteId = cliente.Id,
+                                Cliente = cliente,
+                                Produto = produto,
+                                ProdutoId = produto.Id,
+                                NumeroPedido = numeroPedido,
+                                Data = data,
+                                ValorFinal = valorFinal,
+                                DataEntrega = dataEntrega
+                            };
+
+                            _context.Pedidos.Add(pedido);
+                        }
+                        var pedidos = await _context.SaveChangesAsync();
+                        Console.WriteLine(pedidos);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
 
-        private void SetupSeedData()
-        {
-            _context.Produtos.AddRange(
-            new ClsProduto { Id = 1, Nome = "Celular", Valor = 1000 },
-            new ClsProduto { Id = 2, Nome = "Notebook", Valor = 3000 },
-            new ClsProduto { Id = 3, Nome = "Televisão", Valor = 5000 }
-            );
-        }
-
-        private async Task<ClsViaCepResponse> ConsultarViaCep(string cep)
+        private async Task<ClsViaCepResponse> ConsultaViaCep(string cep)
         {
             var response = await _httpClient.GetAsync($"https://viacep.com.br/ws/{cep}/json/");
             if (response.IsSuccessStatusCode)
@@ -118,7 +116,7 @@ namespace OnionSA.Services
             return null;
         }
 
-        private decimal CalcularFrete(string uf, decimal valorProduto)
+        private decimal CalculaFrete(string uf, decimal valorProduto)
         {
             decimal percentualFrete = uf switch
             {
@@ -132,7 +130,7 @@ namespace OnionSA.Services
             return valorProduto * percentualFrete;
         }
 
-        private DateTime CalcularDataEntrega(string uf, DateTime dataPedido)
+        private DateTime CalculaDataEntrega(string uf, DateTime dataPedido)
         {
             int diasEntrega = uf switch
             {

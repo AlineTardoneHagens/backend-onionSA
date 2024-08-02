@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OnionSA.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/import")]
     [ApiController]
     public class ImportController : ControllerBase
     {
@@ -16,14 +16,14 @@ namespace OnionSA.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Import(IFormFile file)
+        public async Task<IActionResult> ImportaArquivo(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return BadRequest("File not selected");
+                return BadRequest("Arquivo não selecionado");
 
             try
             {
-                await _importService.ImportExcel(file);
+                await _importService.ImportaExcel(file);
                 return Ok();
             }
             catch (ArgumentException ex)

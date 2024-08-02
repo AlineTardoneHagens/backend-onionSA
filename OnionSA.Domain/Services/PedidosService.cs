@@ -16,13 +16,13 @@ namespace OnionSA.Services
             _context = context;
         }
 
-        public async Task<object> GetSalesByRegion()
+        public async Task<object> CalculaVendasPorRegiao()
         {
-            var salesByRegion = await _context.Pedidos
+             var salesByRegion = await _context.Pedidos
                 .Include(p => p.Cliente)
                 .ToListAsync();
 
-            var result = salesByRegion.GroupBy(p => GetRegionByCep(p.Cliente.Cep))
+            var result = salesByRegion.GroupBy(p => BuscaRegiaoPorCep(p.Cliente.Cep))
                 .Select(g => new
                 {
                     Region = g.Key,
@@ -32,7 +32,7 @@ namespace OnionSA.Services
             return result;
         }
 
-        public async Task<object> GetSalesByProduct()
+        public async Task<object> CalculaVendasPorProduto()
         {
             var salesByProduct = await _context.Pedidos
                 .Include(p => p.Produto)
@@ -48,7 +48,7 @@ namespace OnionSA.Services
             return result;
         }
 
-        public async Task<object> GetOrders()
+        public async Task<object> ListaPedidos()
         {
             var orders = await _context.Pedidos
                 .Include(p => p.Cliente)
@@ -65,7 +65,7 @@ namespace OnionSA.Services
             return orders;
         }
 
-        private string GetRegionByCep(string cep)
+        private string BuscaRegiaoPorCep(string cep)
         {
             var regiao = int.Parse(cep.Substring(0, 1));
             return regiao switch

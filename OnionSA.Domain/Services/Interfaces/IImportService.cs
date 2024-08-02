@@ -4,6 +4,6 @@ namespace OnionSA.Domain.Services.Interfaces
 {
     public interface IImportService
     {
-        Task ImportExcel(IFormFile file);
+        Task ImportaExcel(IFormFile file);
     }
 }

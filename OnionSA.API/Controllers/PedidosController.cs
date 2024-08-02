@@ -3,7 +3,7 @@ using OnionSA.Services;
 
 namespace OnionSA.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/pedidos")]
     [ApiController]
     public class PedidosController : ControllerBase
     {
@@ -14,24 +14,24 @@ namespace OnionSA.Controllers
             _salesService = salesService;
         }
 
-        [HttpGet("region")]
-        public async Task<IActionResult> GetSalesByRegion()
+        [HttpGet("regiao")]
+        public async Task<IActionResult> CalculaVendasPorRegiao()
         {
-            var result = await _salesService.GetSalesByRegion();
+            var result = await _salesService.CalculaVendasPorRegiao();
             return Ok(result);
         }
 
-        [HttpGet("product")]
-        public async Task<IActionResult> GetSalesByProduct()
+        [HttpGet("produto")]
+        public async Task<IActionResult> CalculaVendasPorProduto()
         {
-            var result = await _salesService.GetSalesByProduct();
+            var result = await _salesService.CalculaVendasPorProduto();
             return Ok(result);
         }
 
-        [HttpGet("orders")]
-        public async Task<IActionResult> GetOrders()
+        [HttpGet("lista")]
+        public async Task<IActionResult> ListaPedidos()
         {
-            var result = await _salesService.GetOrders();
+            var result = await _salesService.ListaPedidos();
             return Ok(result);
         }
     }

@@ -8,8 +8,8 @@ namespace OnionSA.Domain.Services.Interfaces
 {
     public interface IPedidosService
     {
-        Task<object> GetSalesByRegion();
-        Task<object> GetSalesByProduct();
-        Task<object> GetOrders();
+        Task<object> CalculaVendasPorRegiao();
+        Task<object> CalculaVendasPorProduto();
+        Task<object> ListaPedidos();
     }
 }
