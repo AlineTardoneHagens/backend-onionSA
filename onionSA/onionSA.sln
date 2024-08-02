@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onionSA", "onionSA.csproj", "{FDD475ED-A9AF-4373-9014-67BD0EECD6BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnionSA", "OnionSA.csproj", "{FDD475ED-A9AF-4373-9014-67BD0EECD6BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnionSA.Domain", "..\OnionSA.Domain\OnionSA.Domain.csproj", "{33A91C42-A96A-48B7-A589-4FC62FCD0BD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnionSA.Database", "..\OnionSA.Database\OnionSA.Database.csproj", "{CE5509BE-D8BB-4763-9B90-9404BADD1940}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnionSA.API", "..\OnionSA.API\OnionSA.API.csproj", "{FA0A9C79-AE3B-48F6-AA86-2492A1FC7EA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{FDD475ED-A9AF-4373-9014-67BD0EECD6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDD475ED-A9AF-4373-9014-67BD0EECD6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDD475ED-A9AF-4373-9014-67BD0EECD6BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33A91C42-A96A-48B7-A589-4FC62FCD0BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33A91C42-A96A-48B7-A589-4FC62FCD0BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33A91C42-A96A-48B7-A589-4FC62FCD0BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33A91C42-A96A-48B7-A589-4FC62FCD0BD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE5509BE-D8BB-4763-9B90-9404BADD1940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5509BE-D8BB-4763-9B90-9404BADD1940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE5509BE-D8BB-4763-9B90-9404BADD1940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE5509BE-D8BB-4763-9B90-9404BADD1940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0A9C79-AE3B-48F6-AA86-2492A1FC7EA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0A9C79-AE3B-48F6-AA86-2492A1FC7EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0A9C79-AE3B-48F6-AA86-2492A1FC7EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0A9C79-AE3B-48F6-AA86-2492A1FC7EA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
