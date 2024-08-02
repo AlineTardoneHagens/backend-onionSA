@@ -35,28 +35,28 @@ O projeto é dividido em três partes principais:
 
 ### 1. Clone o Repositório
 
-``bash
+``
 git clone https://github.com/AlineTardoneHagens/backend-onionSA.git
 ``
 
-``bash
+``
 cd onionsa
 ``
 
 ### 2. Restaurar Dependências
 Navegue para o diretório do projeto OnionSA.API e restaure as dependências.
 
-``bash
+``
 cd OnionSA.API
 ``
 
-``bash
+``
 dotnet restore
 ``
 ### 3. Executar a Aplicação
 Para executar o projeto e iniciar a API, use o comando:
 
-``bash
+``
 dotnet run``
 
 A API estará disponível em http://localhost:5087 por padrão. Você pode acessar a documentação do Swagger em http://localhost:5087/swagger/index.html.
